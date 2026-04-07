@@ -1,4 +1,4 @@
-import { defineConfig } from 'astro/config';
+import { defineConfig, sessionDrivers } from 'astro/config';
 import { loadEnv } from 'vite';
 import sanity from '@sanity/astro';
 import react from '@astrojs/react';
@@ -13,6 +13,9 @@ export default defineConfig({
   adapter: cloudflare({
     imageService: 'passthrough',
   }),
+  session: {
+    driver: sessionDrivers.lruCache(),
+  },
   integrations: [
     sanity({
       projectId: env.SANITY_PROJECT_ID,
