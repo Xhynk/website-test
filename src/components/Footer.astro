@@ -1,0 +1,28 @@
+---
+// src/components/Footer.astro
+---
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <img src="/images/logo.png" alt="Alexander Demchak logo" width="40" height="40" class="footer-logo" />
+    <p>&copy; 2026 Alexander Demchak - All rights reserved.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding: var(--spacing-lg) 0 var(--spacing-md);
+    text-align: center;
+    border-top: 1px solid var(--color-card-border);
+  }
+  .footer-logo {
+    margin: 0 auto var(--spacing-sm);
+    height: 40px;
+    width: auto;
+  }
+  .site-footer p {
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+  }
+</style>
