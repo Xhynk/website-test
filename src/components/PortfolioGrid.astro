@@ -1,0 +1,50 @@
+---
+// src/components/PortfolioGrid.astro
+import { urlFor } from '../lib/imageUrl';
+
+interface PortfolioItem {
+  image: any;
+  alt: string;
+}
+
+interface Props {
+  items: PortfolioItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="portfolio-grid">
+  {items.map((item) => (
+    <div class="portfolio-item">
+      <img
+        src={urlFor(item.image).width(700).format('webp').url()}
+        alt={item.alt || 'Portfolio work sample'}
+        width="700"
+        loading="lazy"
+      />
+    </div>
+  ))}
+</div>
+
+<style>
+  .portfolio-grid {
+    columns: 2;
+    column-gap: var(--spacing-sm);
+  }
+  .portfolio-item {
+    break-inside: avoid;
+    margin-bottom: var(--spacing-sm);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  .portfolio-item img {
+    width: 100%;
+    display: block;
+  }
+  @media (max-width: 768px) {
+    .portfolio-grid {
+      columns: 1;
+    }
+  }
+</style>
