@@ -1,17 +1,22 @@
 import { defineConfig } from 'astro/config';
+import { loadEnv } from 'vite';
 import sanity from '@sanity/astro';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import cloudflare from '@astrojs/cloudflare';
 
+const env = loadEnv(import.meta.env.MODE, process.cwd(), '');
+
 export default defineConfig({
   site: 'https://alexanderdemchak.com',
   output: 'server',
-  adapter: cloudflare(),
+  adapter: cloudflare({
+    imageService: 'passthrough',
+  }),
   integrations: [
     sanity({
-      projectId: import.meta.env.SANITY_PROJECT_ID,
-      dataset: import.meta.env.SANITY_DATASET || 'production',
+      projectId: env.SANITY_PROJECT_ID,
+      dataset: env.SANITY_DATASET || 'production',
       useCdn: false,
       studioBasePath: '/studio',
     }),
