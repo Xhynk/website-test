@@ -9,7 +9,7 @@ interface Props {
 
 const { title, description, ogImage, canonicalUrl } = Astro.props;
 const canonical = canonicalUrl || Astro.url.href;
-const og = ogImage || '/images/logo.png';
+const og = ogImage || '/images/logo.webp';
 ---
 
 <title>{title}</title>
