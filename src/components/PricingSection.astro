@@ -1,0 +1,133 @@
+---
+// src/components/PricingSection.astro
+interface PricingTier {
+  title: string;
+  subtitle: string;
+  price: string;
+  features: string[];
+  ctaLabel: string;
+  ctaHref: string;
+  highlighted: boolean;
+}
+
+interface Props {
+  heading: string;
+  tiers: PricingTier[];
+}
+
+const { heading, tiers } = Astro.props;
+
+const professionalServiceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: 'Alexander Demchak',
+  url: 'https://alexanderdemchak.com',
+  priceRange: '$125/hr - $6,750/mo',
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Development Services',
+    itemListElement: tiers.map((tier) => ({
+      '@type': 'Offer',
+      name: tier.title,
+      description: tier.subtitle,
+      price: tier.price,
+    })),
+  },
+};
+---
+
+<section class="pricing section">
+  <div class="container">
+    <h2 class="pricing-heading">{heading}</h2>
+    <div class="pricing-grid">
+      {tiers.map((tier) => (
+        <div class:list={['pricing-card', { highlighted: tier.highlighted }]}>
+          <h3>{tier.highlighted ? <strong>{tier.title}</strong> : tier.title}</h3>
+          <p class="pricing-subtitle">{tier.subtitle}</p>
+          <p class="pricing-price">{tier.price}</p>
+          <h4>What's included</h4>
+          <ul class="pricing-features">
+            {tier.features.map((feature) => (
+              <li>{feature}</li>
+            ))}
+          </ul>
+          <a href={tier.ctaHref} class="btn">{tier.ctaLabel}</a>
+        </div>
+      ))}
+    </div>
+  </div>
+  <script type="application/ld+json" set:html={JSON.stringify(professionalServiceSchema)} />
+</section>
+
+<style>
+  .pricing-heading {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+  }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-md);
+    align-items: start;
+  }
+  .pricing-card {
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-card-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
+  }
+  .pricing-card.highlighted {
+    border-color: var(--color-accent);
+    border-width: 2px;
+    transform: scale(1.05);
+    position: relative;
+    z-index: 1;
+  }
+  .pricing-subtitle {
+    font-size: 0.9rem;
+    margin: var(--spacing-sm) 0;
+  }
+  .pricing-price {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: var(--spacing-sm) 0 var(--spacing-md);
+  }
+  .pricing-card h4 {
+    font-size: 0.95rem;
+    margin-bottom: var(--spacing-sm);
+  }
+  .pricing-features {
+    margin-bottom: var(--spacing-md);
+  }
+  .pricing-features li {
+    padding: var(--spacing-xs) 0;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    padding-left: 1.5em;
+    position: relative;
+  }
+  .pricing-features li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--color-cta-border);
+  }
+  .pricing-card .btn {
+    width: 100%;
+    justify-content: center;
+    font-size: 0.85rem;
+    padding: 12px 20px;
+  }
+  @media (max-width: 768px) {
+    .pricing-grid {
+      grid-template-columns: 1fr;
+      max-width: 450px;
+      margin: 0 auto;
+    }
+    .pricing-card.highlighted {
+      transform: none;
+    }
+  }
+</style>

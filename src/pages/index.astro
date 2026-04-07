@@ -1,17 +1,93 @@
 ---
+// src/pages/index.astro
+export const prerender = true;
 
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import StrategySection from '../components/StrategySection.astro';
+import ServiceCards from '../components/ServiceCards.astro';
+import PricingSection from '../components/PricingSection.astro';
+import FaqSection from '../components/FaqSection.astro';
+import CtaSection from '../components/CtaSection.astro';
+import { fetchHomePage, fetchSiteSettings, fetchServiceCards, fetchPricingTiers, fetchFaqItems } from '../lib/sanity';
+
+const settings = await fetchSiteSettings();
+const home = await fetchHomePage();
+const serviceCards = await fetchServiceCards();
+const pricingTiers = await fetchPricingTiers();
+const faqItems = await fetchFaqItems();
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Alexander Demchak',
+    url: 'https://alexanderdemchak.com',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Alexander Demchak',
+    jobTitle: 'Fractional CTO & Web Developer',
+    url: 'https://alexanderdemchak.com',
+    sameAs: [
+      'https://facebook.com/xhynk',
+      'https://instagram.com/xhynk',
+      'https://x.com/xhynk',
+    ],
+  },
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  title={settings?.seoTitle || 'Alexander Demchak — Fractional CTO & Web Developer'}
+  description={settings?.seoDescription || 'Over 15 years of web development experience.'}
+  jsonLd={jsonLd}
+>
+  <Hero
+    eyebrow={home?.heroEyebrow || '15+ years experience'}
+    headingLine1={home?.heroHeadingLine1 || 'Your Story,'}
+    headingLine2={home?.heroHeadingLine2 || 'My Expertise.'}
+    body={home?.heroBody || ''}
+    ctaLabel={home?.heroCtaLabel || 'Contact Alexander'}
+    ctaHref={home?.heroCtaHref || '/contact'}
+    images={home?.heroImages || []}
+  />
+
+  <StrategySection
+    eyebrow={home?.strategyEyebrow || "LET'S GET YOU"}
+    heading={home?.strategyHeading || 'A Better Strategy for Better Results'}
+    body={home?.strategyBody || ''}
+    image={home?.strategyImage}
+  />
+
+  <ServiceCards
+    eyebrow={home?.servicesEyebrow || 'WORKING WITH ALEXANDER...'}
+    headingLine1={home?.servicesHeadingLine1 || '...Is the Best Decision You Can Make!'}
+    headingLine2={home?.servicesHeadingLine2 || 'What Options Are There?'}
+    cards={serviceCards || []}
+  />
+
+  <PricingSection
+    heading={home?.billingHeading || "Billing Isn't Fun, But It's Necessary"}
+    tiers={pricingTiers || []}
+  />
+
+  <section class="interstitial section">
+    <div class="container" style="text-align: center;">
+      <h2>{home?.interstitialHeading || "Let's Work Together Soon!"}</h2>
+    </div>
+  </section>
+
+  <FaqSection
+    heading={home?.faqHeading || 'Frequently Asked Questions'}
+    subheading={home?.faqSubheading || 'Everything you need to know about the service and billing.'}
+    items={faqItems || []}
+  />
+
+  <CtaSection
+    heading={home?.ctaHeading || "Let's Bring Your Story To Life"}
+    buttonLabel={home?.ctaButtonLabel || 'Contact Alexander Today'}
+    buttonHref={home?.ctaButtonHref || '/contact'}
+  />
+</BaseLayout>

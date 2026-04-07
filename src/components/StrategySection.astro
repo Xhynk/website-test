@@ -1,0 +1,62 @@
+---
+// src/components/StrategySection.astro
+import { urlFor } from '../lib/imageUrl';
+
+interface Props {
+  eyebrow: string;
+  heading: string;
+  body: string;
+  image: any;
+}
+
+const { eyebrow, heading, body, image } = Astro.props;
+const paragraphs = body.split('\n').filter((p: string) => p.trim());
+---
+
+<section class="strategy section">
+  <div class="container strategy-grid">
+    <div class="strategy-content">
+      <p class="eyebrow">{eyebrow}</p>
+      <h2>{heading}</h2>
+      {paragraphs.map((p: string) => <p class="strategy-text">{p}</p>)}
+    </div>
+    {image && (
+      <div class="strategy-image">
+        <img
+          src={urlFor(image).width(600).height(450).format('webp').url()}
+          alt="Alexander Demchak working"
+          width="600"
+          height="450"
+          loading="lazy"
+        />
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .strategy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+    align-items: center;
+  }
+  .strategy h2 {
+    margin-bottom: var(--spacing-md);
+  }
+  .strategy-text {
+    margin-bottom: var(--spacing-sm);
+  }
+  .strategy-image img {
+    border-radius: var(--radius-md);
+    width: 100%;
+  }
+  @media (max-width: 768px) {
+    .strategy-grid {
+      grid-template-columns: 1fr;
+    }
+    .strategy-image {
+      order: -1;
+    }
+  }
+</style>

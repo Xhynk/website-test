@@ -1,0 +1,99 @@
+---
+// src/components/FaqSection.astro
+interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  heading: string;
+  subheading: string;
+  items: FaqItem[];
+}
+
+const { heading, subheading, items } = Astro.props;
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: items.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
+---
+
+<section class="faq section">
+  <div class="container">
+    <div class="faq-header">
+      <h2>{heading}</h2>
+      <p class="faq-sub">{subheading}</p>
+    </div>
+    <div class="faq-list">
+      {items.map((item) => (
+        <details class="faq-item">
+          <summary>
+            <h4>{item.question}</h4>
+            <span class="faq-icon" aria-hidden="true"></span>
+          </summary>
+          <p class="faq-answer">{item.answer}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+</section>
+
+<style>
+  .faq-header {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+  }
+  .faq-sub {
+    font-size: 1rem;
+    margin-top: var(--spacing-xs);
+  }
+  .faq-list {
+    max-width: 750px;
+    margin: 0 auto;
+  }
+  .faq-item {
+    border: 1px solid var(--color-card-border);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-sm);
+    overflow: hidden;
+  }
+  .faq-item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-sm) var(--spacing-md);
+    cursor: pointer;
+    list-style: none;
+  }
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq-item summary h4 {
+    font-weight: 500;
+    font-size: 1rem;
+  }
+  .faq-icon::after {
+    content: '▸';
+    font-size: 1.2rem;
+    transition: transform 0.2s ease;
+    display: inline-block;
+  }
+  .faq-item[open] .faq-icon::after {
+    transform: rotate(90deg);
+  }
+  .faq-answer {
+    padding: 0 var(--spacing-md) var(--spacing-md);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+</style>

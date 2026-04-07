@@ -1,0 +1,107 @@
+---
+// src/components/Hero.astro
+import { urlFor } from '../lib/imageUrl';
+
+interface Props {
+  eyebrow: string;
+  headingLine1: string;
+  headingLine2: string;
+  body: string;
+  ctaLabel: string;
+  ctaHref: string;
+  images: any[];
+}
+
+const { eyebrow, headingLine1, headingLine2, body, ctaLabel, ctaHref, images } = Astro.props;
+---
+
+<section class="hero section">
+  <div class="container hero-grid">
+    <div class="hero-content">
+      <p class="eyebrow">{eyebrow}</p>
+      <h1>
+        <span class="hero-line1">{headingLine1}</span>
+        <span class="hero-line2">{headingLine2}</span>
+      </h1>
+      <p class="hero-body">{body}</p>
+      <a href={ctaHref} class="btn">{ctaLabel}</a>
+    </div>
+    {images && images.length > 0 && (
+      <div class="hero-images">
+        {images.map((img: any, i: number) => (
+          <div class="hero-portrait">
+            <img
+              src={urlFor(img).width(150).height(150).format('webp').url()}
+              alt={`Portrait ${i + 1}`}
+              width="150"
+              height="150"
+              loading={i < 3 ? 'eager' : 'lazy'}
+            />
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding: var(--spacing-xl) 0;
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+    align-items: center;
+  }
+  .hero h1 {
+    margin-bottom: var(--spacing-md);
+  }
+  .hero-line1,
+  .hero-line2 {
+    display: block;
+  }
+  .hero-body {
+    font-size: 1.1rem;
+    margin-bottom: var(--spacing-md);
+    max-width: 500px;
+  }
+  .hero-images {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-sm);
+    justify-items: center;
+  }
+  .hero-portrait {
+    width: 120px;
+    height: 120px;
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    border: 3px solid var(--color-accent);
+  }
+  .hero-portrait img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  @media (max-width: 768px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+    .hero-body {
+      max-width: none;
+    }
+    .hero-images {
+      order: -1;
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .hero-portrait {
+      width: 90px;
+      height: 90px;
+    }
+  }
+</style>

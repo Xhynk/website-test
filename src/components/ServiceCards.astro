@@ -1,0 +1,105 @@
+---
+// src/components/ServiceCards.astro
+import { urlFor } from '../lib/imageUrl';
+
+interface ServiceCard {
+  title: string;
+  description: string;
+  image: any;
+  sortOrder: number;
+}
+
+interface Props {
+  eyebrow: string;
+  headingLine1: string;
+  headingLine2: string;
+  cards: ServiceCard[];
+}
+
+const { eyebrow, headingLine1, headingLine2, cards } = Astro.props;
+---
+
+<section class="services section">
+  <div class="container">
+    <div class="services-header">
+      <p class="eyebrow">{eyebrow}</p>
+      <h2>{headingLine1}<br />{headingLine2}</h2>
+    </div>
+    <div class="services-list">
+      {cards.map((card, i) => (
+        <div class:list={['service-card', { reverse: i % 2 !== 0 }]}>
+          <div class="service-number">
+            <span>{i + 1}</span>
+          </div>
+          <div class="service-text">
+            <h3><strong>{card.title}</strong></h3>
+            <p>{card.description}</p>
+          </div>
+          {card.image && (
+            <div class="service-image">
+              <img
+                src={urlFor(card.image).width(500).height(350).format('webp').url()}
+                alt={card.title}
+                width="500"
+                height="350"
+                loading="lazy"
+              />
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .services-header {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+  }
+  .service-card {
+    display: grid;
+    grid-template-columns: auto 1fr 1fr;
+    gap: var(--spacing-md);
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+  }
+  .service-card.reverse {
+    direction: rtl;
+  }
+  .service-card.reverse > * {
+    direction: ltr;
+  }
+  .service-number span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: var(--radius-full);
+    border: 2px solid var(--color-accent);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--color-accent);
+  }
+  .service-text h3 {
+    color: var(--color-accent);
+    margin-bottom: var(--spacing-xs);
+  }
+  .service-image img {
+    border-radius: var(--radius-md);
+    width: 100%;
+  }
+  @media (max-width: 768px) {
+    .service-card {
+      grid-template-columns: auto 1fr;
+    }
+    .service-image {
+      grid-column: 1 / -1;
+    }
+    .service-card.reverse {
+      direction: ltr;
+    }
+  }
+</style>

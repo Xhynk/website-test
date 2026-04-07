@@ -1,0 +1,28 @@
+---
+// src/components/CtaSection.astro
+interface Props {
+  heading: string;
+  buttonLabel: string;
+  buttonHref: string;
+}
+
+const { heading, buttonLabel, buttonHref } = Astro.props;
+---
+
+<section class="cta section">
+  <div class="container cta-inner">
+    <h2>{heading}</h2>
+    <a href={buttonHref} class="btn">{buttonLabel}</a>
+  </div>
+</section>
+
+<style>
+  .cta {
+    background: var(--color-bg-dark);
+    text-align: center;
+  }
+  .cta h2 {
+    margin-bottom: var(--spacing-md);
+    color: var(--color-accent);
+  }
+</style>
