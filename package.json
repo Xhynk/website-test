@@ -7,7 +7,8 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/patch-wrangler.mjs",
+    "deploy": "npm run build && cd dist/server && npx wrangler deploy",
     "preview": "astro preview",
     "astro": "astro"
   },
